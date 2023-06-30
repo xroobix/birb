@@ -4,4 +4,6 @@
 
 body {
     @apply bg-zinc-900 text-slate-100;
+
+    overscroll-behavior: none;
 }
