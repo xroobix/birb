@@ -4,9 +4,27 @@ import Image from "next/image";
 import { type GetStaticProps } from "next/types";
 import superjson from "superjson";
 import { PageLayout } from "~/components/layout";
+import { LoadingPage } from "~/components/loading";
+import { PostView } from "~/components/postview";
 import { appRouter } from "~/server/api/root";
 import { prisma } from "~/server/db";
 import { api } from "~/utils/api";
+
+
+const ProfileFeed = (props: {userId: string}) => {
+  const {data, isLoading} = api.posts.getPostsByUserId.useQuery({userId: props.userId})
+
+  if (isLoading) return <LoadingPage />
+
+  if (!data || data.length === 0) return <div>User has not posted</div> 
+
+
+  return (
+    <div className="flex flex-col">
+      {data.map((fullPost) => (<PostView {...fullPost} key={fullPost.post.id}/>))}
+    </div>
+  )
+}
 
 export default function ProfilePage({ username }: { username: string }) {
   const { data } = api.profile.getUserByUsername.useQuery({
@@ -14,8 +32,6 @@ export default function ProfilePage({ username }: { username: string }) {
   });
 
   if (!data) return <div>404</div>;
-
-  console.log(data);
 
   return (
     <>
@@ -34,7 +50,8 @@ export default function ProfilePage({ username }: { username: string }) {
         </div>
         <div className="h-[64px]"></div>
         <div className="p-4 text-2xl font-bold">{`@${data.username?? ""}`}</div>
-        <div className="border-b border-x-slate-400 w-full"></div>
+        <div className="border-b border-x-slate-400 w-full"/>
+        <ProfileFeed userId={data.id}/>
       </PageLayout>
     </>
   );
