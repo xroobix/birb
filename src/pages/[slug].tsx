@@ -1,13 +1,10 @@
-import { createServerSideHelpers } from "@trpc/react-query/server";
 import Head from "next/head";
 import Image from "next/image";
 import { type GetStaticProps } from "next/types";
-import superjson from "superjson";
 import { PageLayout } from "~/components/layout";
 import { LoadingPage } from "~/components/loading";
 import { PostView } from "~/components/postview";
-import { appRouter } from "~/server/api/root";
-import { prisma } from "~/server/db";
+import { generateSSGHelper } from "~/server/helpers/ssgHelper";
 import { api } from "~/utils/api";
 
 
@@ -57,11 +54,7 @@ export default function ProfilePage({ username }: { username: string }) {
   );
 }
 export const getStaticProps: GetStaticProps = async (context) => {
-  const ssg = createServerSideHelpers({
-    router: appRouter,
-    ctx: { prisma, userId: null },
-    transformer: superjson, // optional - adds superjson serialization
-  });
+  const ssg = generateSSGHelper();
 
   const slug = context.params?.slug;
 

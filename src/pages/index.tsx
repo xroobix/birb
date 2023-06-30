@@ -6,9 +6,7 @@ import toast from "react-hot-toast";
 import { PageLayout } from "~/components/layout";
 import { LoadingPage, LoadingSpinner } from "~/components/loading";
 import { PostView } from "~/components/postview";
-import { api} from "~/utils/api";
-
-
+import { api } from "~/utils/api";
 
 const CreatePostWizard = () => {
   const { user } = useUser();
@@ -73,8 +71,6 @@ const CreatePostWizard = () => {
     </div>
   );
 };
-
-
 
 const Feed = () => {
   const { data, isLoading: postsLoading } = api.posts.getAll.useQuery();
