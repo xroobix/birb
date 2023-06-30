@@ -1,12 +1,9 @@
 import Head from "next/head";
-import Image from "next/image";
 import { type GetStaticProps } from "next/types";
 import { PageLayout } from "~/components/layout";
-import { LoadingPage } from "~/components/loading";
 import { PostView } from "~/components/postview";
 import { generateSSGHelper } from "~/server/helpers/ssgHelper";
 import { api } from "~/utils/api";
-
 
 export default function SinglePostPage({ id }: { id: string }) {
   const { data } = api.posts.getById.useQuery({
@@ -33,7 +30,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   if (typeof id !== "string") throw new Error("no id");
 
-  await ssg.posts.getById.prefetch({id})
+  await ssg.posts.getById.prefetch({ id });
 
   return {
     props: {
